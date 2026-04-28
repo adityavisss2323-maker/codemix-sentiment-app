@@ -6,23 +6,35 @@ function App() {
   const [result, setResult] = useState(null);
   const [history, setHistory] = useState([]);
 
+  const API = "https://codemix-sentiment-app.onrender.com";
+
   const analyzeText = async () => {
     if (!text.trim()) {
       alert("Please enter some text");
       return;
     }
 
-    const res = await axios.post("http://localhost:5000/api/analyze", {
-      text: text,
-    });
+    try {
+      const res = await axios.post(`${API}/api/analyze`, {
+        text: text,
+      });
 
-    setResult(res.data);
-    setText("");
+      setResult(res.data);
+      setText("");
+    } catch (err) {
+      console.error(err);
+      alert("Error analyzing text");
+    }
   };
 
   const getHistory = async () => {
-    const res = await axios.get("http://localhost:5000/api/history");
-    setHistory(res.data);
+    try {
+      const res = await axios.get(`${API}/api/history`);
+      setHistory(res.data);
+    } catch (err) {
+      console.error(err);
+      alert("Error fetching history");
+    }
   };
 
   return (
